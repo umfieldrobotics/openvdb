@@ -18,12 +18,12 @@
   and required dependencies are expected. See the dependency documentation
   for more information:
 
-    https://academysoftwarefoundation.github.io/openvdb/dependencies.html
+    https://www.openvdb.org/documentation/doxygen/dependencies.html
 
   And the documentation on building OpenVDB for more in depth installation
   instructions:
 
-    https://academysoftwarefoundation.github.io/openvdb/build.html
+    https://www.openvdb.org/documentation/doxygen/build.html
 
   This CMakeLists file provides most available options for configuring the
   build and installation of all OpenVDB components. By default the core
@@ -53,7 +53,7 @@ endif()
 ###### Version
 
 set(OpenVDB_MAJOR_VERSION 9)
-set(OpenVDB_MINOR_VERSION 0)
+set(OpenVDB_MINOR_VERSION 1)
 set(OpenVDB_PATCH_VERSION 1)
 set(OpenVDB_VERSION "${OpenVDB_MAJOR_VERSION}.${OpenVDB_MINOR_VERSION}.${OpenVDB_PATCH_VERSION}")
 
@@ -152,6 +152,7 @@ set(MSVC_MP_THREAD_COUNT "" CACHE STRING [=[
 The number of threads to use when invoking MSVC builds with cmake --build. CMake defaults to 1. Note that
 cmake --parallel and CMAKE_BUILD_PARALLEL_LEVEL only change the number of PROJECTS that are built in parallel,
 NOT the number of TU's ]=])
+option(MSVC_COMPRESS_PDB "Whether to attempt to compress PDB symbol data in MSVC debug builds." OFF)
 
 set(_CONCURRENT_MALLOC_OPTIONS None Auto Jemalloc Tbbmalloc)
 if(NOT CONCURRENT_MALLOC)
@@ -254,6 +255,7 @@ mark_as_advanced(
   USE_IMATH_HALF
   USE_LOG4CPLUS
   USE_MAYA
+  MSVC_COMPRESS_PDB
 )
 
 #########################################################################
@@ -523,10 +525,6 @@ if(OPENVDB_BUILD_AX)
   add_subdirectory(openvdb_ax/openvdb_ax)
 endif()
 
-if(OPENVDB_BUILD_AX_UNITTESTS)
-  add_subdirectory(openvdb_ax/openvdb_ax/test)
-endif()
-
 if(OPENVDB_BUILD_PYTHON_MODULE)
   add_subdirectory(openvdb/openvdb/python)
 endif()
@@ -537,6 +535,10 @@ endif()
 
 if(OPENVDB_BUILD_UNITTESTS)
   add_subdirectory(openvdb/openvdb/unittest)
+endif()
+
+if(OPENVDB_BUILD_AX_UNITTESTS)
+  add_subdirectory(openvdb_ax/openvdb_ax/test)
 endif()
 
 if(OPENVDB_BUILD_HOUDINI_PLUGIN)

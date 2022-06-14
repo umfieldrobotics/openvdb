@@ -128,7 +128,8 @@
 
 /// @brief Bracket code with OPENVDB_NO_DEPRECATION_WARNING_BEGIN/_END,
 /// to inhibit warnings about deprecated code.
-/// @note Use this sparingly.  Remove references to deprecated code if at all possible.
+/// @note Only intended to be used internally whilst parent code is being
+///   deprecated
 /// @details Example:
 /// @code
 /// OPENVDB_DEPRECATED void myDeprecatedFunction() {}
