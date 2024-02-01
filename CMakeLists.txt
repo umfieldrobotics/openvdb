@@ -64,6 +64,9 @@ project(OpenVDB LANGUAGES CXX VERSION ${OpenVDB_VERSION})
 include(CMakeDependentOption)
 include(GNUInstallDirs)
 
+# anja added
+find_package(TBB REQUIRED)
+
 # todo epydoc and pdflatex
 option(OPENVDB_BUILD_CORE "Enable the core OpenVDB library. Both static and shared versions are enabled by default" ON)
 option(OPENVDB_BUILD_BINARIES "Enable the vdb binaries. Only vdb_print is enabled by default" ON)

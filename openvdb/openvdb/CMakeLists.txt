@@ -431,6 +431,7 @@ set(OPENVDB_LIBRARY_MATH_INCLUDE_FILES
   math/Vec2.h
   math/Vec3.h
   math/Vec4.h
+  math/VecX.h
 )
 
 set(OPENVDB_LIBRARY_POINTS_INCLUDE_FILES

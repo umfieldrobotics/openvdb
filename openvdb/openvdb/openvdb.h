@@ -63,6 +63,8 @@ using Vec2STree    = tree::Tree4<Vec2s,       5, 4, 3>::Type;
 using Vec3DTree    = tree::Tree4<Vec3d,       5, 4, 3>::Type;
 using Vec3ITree    = tree::Tree4<Vec3i,       5, 4, 3>::Type;
 using Vec3STree    = tree::Tree4<Vec3f,       5, 4, 3>::Type;
+using Vec10ITree   = tree::Tree4<Vec10i,      5, 4, 3>::Type; // added by Anja Sheppard 1/31
+using Vec28ITree   = tree::Tree4<Vec28i,      5, 4, 3>::Type; // added by Anja Sheppard 1/31
 using ScalarTree   = FloatTree;
 using TopologyTree = MaskTree;
 using Vec3dTree    = Vec3DTree;
@@ -84,6 +86,8 @@ using TopologyGrid = MaskGrid;
 using Vec3dGrid    = Vec3DGrid;
 using Vec3fGrid    = Vec3SGrid;
 using VectorGrid   = Vec3fGrid;
+using Vec10IGrid   = Grid<Vec10ITree>;  // added by Anja Sheppard 1/31
+using Vec28IGrid   = Grid<Vec28ITree>;  // added by Anja Sheppard 1/31
 
 /// @name Lists of native Grid Types
 /// @{
