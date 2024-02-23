@@ -36,6 +36,7 @@ using half = internal::half;
 #include <openvdb/math/Vec2.h>
 #include <openvdb/math/Vec3.h>
 #include <openvdb/math/Vec4.h>
+#include <openvdb/math/Vec28.h>
 #include <openvdb/math/VecX.h>
 #include <openvdb/math/Mat3.h>
 #include <openvdb/math/Mat4.h>
@@ -105,7 +106,7 @@ using math::Mat4d;
 
 // X-dimensional vector types (added by Anja Sheppard 1/31/24)
 using Vec10i = math::VecX<10, Index32>;
-using Vec28i = math::VecX<28, Index32>;
+using Vec28i = math::Vec28<Index32>;
 
 // Quaternions
 using QuatR = math::Quat<Real>;
