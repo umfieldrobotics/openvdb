@@ -99,19 +99,17 @@ public:
         return true;
     }
 
-    // /// Negation operator, for e.g.   v1 = -v2;
-    // template<int SRC_SIZE>
-    // VecX<SRC_SIZE, T> operator-() const
-    // {        
-    //     return VecXd(
-    //         for (int i = 0; i < SRC_SIZE; i++) {}
-    //     )
-    //     return Vec4<T>(
-    //         -this->mm[0],
-    //         -this->mm[1],
-    //         -this->mm[2],
-    //         -this->mm[3]);
-    // }
+    /// Negation operator, for e.g.   v1 = -v2;
+    template<int SRC_SIZE>
+    VecX<SRC_SIZE, T> operator-() const
+    {   
+        VecX<SRC_SIZE, T> tmp(SRC_SIZE);     
+        for (int i = 0; i < SRC_SIZE; i++) {
+            tmp[i] = -this->mm[i];
+        }
+
+        return tmp;
+    }
 
     /// this = v1 + v2
     /// "this", v1 and v2 need not be distinct objects, e.g. v.add(v1,v);

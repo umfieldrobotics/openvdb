@@ -870,6 +870,8 @@ BOOST_PYTHON_MODULE(PY_OPENVDB_MODULE_NAME)
     _openvdbmodule::VecConverter<Vec4s>::registerConverter();
     _openvdbmodule::VecConverter<Vec4d>::registerConverter();
 
+    _openvdbmodule::VecConverter<Vec28i>::registerConverter();
+
     _openvdbmodule::MatConverter<Mat4s>::registerConverter();
     _openvdbmodule::MatConverter<Mat4d>::registerConverter();
 
