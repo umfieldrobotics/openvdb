@@ -105,6 +105,8 @@
 #define NANOVDB_MINOR_VERSION_NUMBER 3 //  reflects changes to the API but not ABI
 #define NANOVDB_PATCH_VERSION_NUMBER 3 //  reflects changes that does not affect the ABI or API
 
+#define NANOVDB_USE_CUDA // this should ideally be set in the cmake file with target_compile_definitions but I can't get it to trickle down here for some reason
+
 // This replaces a Coord key at the root level with a single uint64_t
 #define USE_SINGLE_ROOT_KEY
 

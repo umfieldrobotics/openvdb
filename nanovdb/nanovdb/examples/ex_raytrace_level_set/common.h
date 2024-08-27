@@ -7,7 +7,7 @@
 #include <chrono>
 #include <fstream>
 #include <nanovdb/NanoVDB.h>
-#include "ComputePrimitives.h"
+#include "../ex_util/ComputePrimitives.h"
 
 inline __hostdev__ uint32_t CompactBy1(uint32_t x)
 {
