@@ -76,6 +76,7 @@ using BoolGrid     = Grid<BoolTree>;
 using DoubleGrid   = Grid<DoubleTree>;
 using FloatGrid    = Grid<FloatTree>;
 using Int32Grid    = Grid<Int32Tree>;
+using UInt32Grid   = Grid<UInt32Tree>; // added by Anja Sheppard 8/30/24
 using Int64Grid    = Grid<Int64Tree>;
 using MaskGrid     = Grid<MaskTree>;
 using Vec3DGrid    = Grid<Vec3DTree>;
@@ -94,7 +95,7 @@ using Vec28IGrid   = Grid<Vec28ITree>;  // added by Anja Sheppard 1/31
 /// The floating point Grid types which OpenVDB will register by default.
 using RealGridTypes   = TypeList<FloatGrid, DoubleGrid>;
 /// The integer Grid types which OpenVDB will register by default.
-using IntegerGridTypes = TypeList<Int32Grid, Int64Grid>;
+using IntegerGridTypes = TypeList<Int32Grid, Int64Grid, UInt32Grid>;
 /// The scalar Grid types which OpenVDB will register by default. This is a
 /// combination of native floating point and integer grid types. Note that
 /// this list does not include Bool or Mask Grids.

@@ -245,7 +245,7 @@ public:
     /// @par Example:
     /// @code
     /// using AllowedGridTypes = openvdb::TypeList<
-    ///     openvdb::Int32Grid, openvdb::Int64Grid,
+    ///     openvdb::Int32Grid, openvdb::Int64Grid, openvdb::UInt32Grid,
     ///     openvdb::FloatGrid, openvdb::DoubleGrid>;
     ///
     /// const openvdb::CoordBBox bbox{
