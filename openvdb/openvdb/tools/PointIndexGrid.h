@@ -103,6 +103,15 @@ template<typename GridT, typename PointArrayT>
 inline typename GridT::Ptr
 createPointIndexGrid(const PointArrayT& points, const math::Transform& xform);
 
+/// @brief  Add points to existing PointIndexGrid.
+///
+/// @param grid     pointer to grid that we want to append to
+/// @param points   world-space point array conforming to the PointArray interface
+/// @param xform    world-to-index-space transform
+template<typename GridT, typename PointArrayT>
+inline typename GridT::Ptr
+appendPointIndexGrid(GridT::Ptr grid, const PointArrayT& points, const math::Transform& xform);
+
 
 /// @brief  Return @c true if the given point index grid represents a valid partitioning
 ///         of the given point array.
@@ -490,6 +499,41 @@ struct PopulateLeafNodesOp
 template<typename TreeType, typename PointArray>
 inline void
 constructPointTree(TreeType& tree, const math::Transform& xform, const PointArray& points)
+{
+    using LeafType = typename TreeType::LeafNodeType;
+
+    std::unique_ptr<LeafType*[]> leafNodes;
+    size_t leafNodeCount = 0;
+
+    {
+        // Important:  Do not disable the cell-centered transform in the PointPartitioner.
+        //             This interpretation is assumed in the PointIndexGrid and all related
+        //             search algorithms.
+        PointPartitioner<uint32_t, LeafType::LOG2DIM> partitioner;
+        partitioner.construct(points, xform, /*voxelOrder=*/false, /*recordVoxelOffsets=*/true);
+
+        if (!partitioner.usingCellCenteredTransform()) {
+            OPENVDB_THROW(LookupError, "The PointIndexGrid requires a "
+                "cell-centered transform.");
+        }
+
+        leafNodeCount = partitioner.size();
+        leafNodes.reset(new LeafType*[leafNodeCount]);
+
+        const tbb::blocked_range<size_t> range(0, leafNodeCount);
+        tbb::parallel_for(range, PopulateLeafNodesOp<LeafType>(leafNodes, partitioner));
+    }
+
+    tree::ValueAccessor<TreeType> acc(tree);
+    for (size_t n = 0; n < leafNodeCount; ++n) {
+        acc.addLeaf(leafNodes[n]);
+    }
+}
+
+/// Append to a @c PointIndexTree
+template<typename TreeType, typename PointArray>
+inline void
+appendPointTree(TreeType& tree, const math::Transform& xform, const PointArray& points)
 {
     using LeafType = typename TreeType::LeafNodeType;
 
@@ -1296,6 +1340,19 @@ createPointIndexGrid(const PointArrayT& points, double voxelSize)
 {
     math::Transform::Ptr xform = math::Transform::createLinearTransform(voxelSize);
     return createPointIndexGrid<GridT>(points, *xform);
+}
+
+
+template<typename GridT, typename PointArrayT>
+inline typename GridT::Ptr
+appendPointIndexGrid(GridT::Ptr grid, const PointArrayT& points, const math::Transform& xform)
+{
+    if (points.size() > 0) {
+        point_index_grid_internal::constructPointTree(
+            grid->tree(), grid->transform(), points);
+    }
+
+    return grid;
 }
 
 

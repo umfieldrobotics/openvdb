@@ -79,6 +79,22 @@ createPointDataGrid(const std::vector<ValueT>& positions,
                     const Metadata* positionDefaultValue = nullptr);
 
 
+/// @brief  Convenience method to add to a @c PointDataGrid from a std::vector of
+///         point positions.
+///
+/// @param  positions     list of world space point positions.
+/// @param  positionDefaultValue metadata default position value
+///
+/// @note   This method implicitly wraps the std::vector for a Point-Partitioner compatible
+///         data structure and creates the required @c PointIndexGrid to the points.
+
+template <typename CompressionT, typename PointDataGridT, typename ValueT>
+inline typename PointDataGridT::Ptr
+appendPointDataGrid(PointDataGridT& grid,
+                    const std::vector<ValueT>& positions,
+                    const Metadata* positionDefaultValue = nullptr);
+
+
 /// @brief  Stores point attribute data in an existing @c PointDataGrid attribute.
 ///
 /// @param  tree            the PointDataGrid to be populated.
@@ -744,6 +760,24 @@ createPointDataGrid(const std::vector<ValueT>& positions,
         tools::createPointIndexGrid<tools::PointIndexGrid>(pointList, xform);
     return createPointDataGrid<CompressionT, PointDataGridT>(
         *pointIndexGrid, pointList, xform, positionDefaultValue);
+}
+
+////////////////////////////////////////
+
+
+template <typename CompressionT, typename PointDataGridT, typename ValueT>
+inline typename PointDataGridT::Ptr
+appendPointDataGrid(PointDataGridT::Ptr grid,
+                    const std::vector<ValueT>& positions,
+                    const Metadata* positionDefaultValue)
+{
+    const PointAttributeVector<ValueT> pointList(positions);
+
+    const math::Transform xform = grid_->transform();
+
+    tools::PointIndexGrid::Ptr pointIndexGrid =
+        tools::appendPointIndexGrid<tools::PointIndexGrid>(grid, pointList, xform);
+    return createPointDataGrid<CompressionT, PointDataGridT>(*pointIndexGrid, pointList, xform, positionDefaultValue);
 }
 
 
