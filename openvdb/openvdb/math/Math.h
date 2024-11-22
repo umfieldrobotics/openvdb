@@ -132,7 +132,7 @@ template<typename T> inline T negative(const T& val)
 #pragma warning(push)
 #pragma warning(disable:4146)
 #endif
-    return T(-val);
+    return -val;
 #if defined(_MSC_VER)
 #pragma warning(pop)
 #endif

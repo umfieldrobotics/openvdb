@@ -36,6 +36,7 @@ using half = internal::half;
 #include <openvdb/math/Vec2.h>
 #include <openvdb/math/Vec3.h>
 #include <openvdb/math/Vec4.h>
+#include <openvdb/math/VecX.h>
 #include <openvdb/math/Mat3.h>
 #include <openvdb/math/Mat4.h>
 #include <openvdb/math/Coord.h>
@@ -49,6 +50,7 @@ OPENVDB_USE_VERSION_NAMESPACE
 namespace OPENVDB_VERSION_NAME {
 
 // One-dimensional scalar types
+using Index16 = uint16_t;
 using Index32 = uint32_t;
 using Index64 = uint64_t;
 using Index   = Index32;
@@ -75,6 +77,8 @@ using Vec3f = math::Vec3<float>;
 using Vec3H = math::Vec3<math::half>;
 using Vec3U8 = math::Vec3<uint8_t>;
 using Vec3U16 = math::Vec3<uint16_t>;
+template <int S>
+using VecXI16= math::VecX<S, Index16>;
 using math::Vec3i;
 using math::Vec3s;
 using math::Vec3d;
