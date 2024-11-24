@@ -78,7 +78,7 @@ using Vec3H = math::Vec3<math::half>;
 using Vec3U8 = math::Vec3<uint8_t>;
 using Vec3U16 = math::Vec3<uint16_t>;
 template <int S>
-using VecXI16= math::VecX<S, Index16>;
+using VecXI16 = math::VecX<S, Index16>;
 using math::Vec3i;
 using math::Vec3s;
 using math::Vec3d;

@@ -58,6 +58,15 @@ public:
     /// Alternative indexed constant reference to the elements,
     T operator()(int i) const { return this->mm[i]; }
 
+    /// Cast to double
+    operator double() const {
+        int max_i = 0;
+        for (int i = 0; i < SIZE; ++i) {
+            if (this->mm[i] > this->mm[max_i]) max_i = i;
+        }
+        return static_cast<double>(this->mm[max_i]);
+    }
+
     /// Returns size of VecX
     const int getSize() const { return this->size; }
 
