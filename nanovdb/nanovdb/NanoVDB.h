@@ -4793,7 +4793,7 @@ using Vec3dTree = NanoTree<Vec3d>;
 using Vec4fTree = NanoTree<Vec4f>;
 using Vec4dTree = NanoTree<Vec4d>;
 using Vec3ITree = NanoTree<Vec3i>;
-template <int S>
+template <uint16_t S>
 using VecXITree = NanoTree<math::VecXi<S>>;
 using MaskTree = NanoTree<ValueMask>;
 using BoolTree = NanoTree<bool>;
@@ -4816,7 +4816,7 @@ using Vec3dGrid = Grid<Vec3dTree>;
 using Vec4fGrid = Grid<Vec4fTree>;
 using Vec4dGrid = Grid<Vec4dTree>;
 using Vec3IGrid = Grid<Vec3ITree>;
-template <int S>
+template <uint16_t S>
 using VecXIGrid = Grid<VecXITree<S>>;
 using MaskGrid = Grid<MaskTree>;
 using BoolGrid = Grid<BoolTree>;

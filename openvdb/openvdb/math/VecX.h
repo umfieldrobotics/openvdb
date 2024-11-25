@@ -17,7 +17,7 @@ OPENVDB_USE_VERSION_NAMESPACE
 namespace OPENVDB_VERSION_NAME {
 namespace math {
 
-template<int SIZE, typename T>
+template<uint16_t SIZE, typename T>
 class VecX: public Tuple<SIZE, T>
 {
 public:
@@ -30,13 +30,13 @@ public:
     VecX() = default;
 
     /// @brief Construct a vector all of whose components have the given value.
-    explicit VecX(T val) { for (int i = 0; i < SIZE; i++) { this->mm[i] = val; } }
+    explicit VecX(T val) { for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] = val; } }
 
     /// Conversion constructor
-    template<int SRC_SIZE, typename Source>
+    template<uint16_t SRC_SIZE, typename Source>
     explicit VecX(const Tuple<SRC_SIZE, Source> &v)
     {
-        for (int i = 0; i < SRC_SIZE; i++) { this->mm[i] = static_cast<T>(v[i]); }
+        for (uint16_t i = 0; i < SRC_SIZE; i++) { this->mm[i] = static_cast<T>(v[i]); }
     }
 
     /// @brief Construct a vector all of whose components have the given value,
@@ -46,7 +46,7 @@ public:
     explicit VecX(Other val,
         typename std::enable_if<std::is_arithmetic<Other>::value, Conversion>::type = Conversion{})
     {
-        for (int i = 0; i < SIZE; i++) {this->mm[i] = static_cast<T>(val);}
+        for (uint16_t i = 0; i < SIZE; i++) {this->mm[i] = static_cast<T>(val);}
     }
 
     T* asPointer() { return this->mm; }
@@ -60,15 +60,15 @@ public:
 
     /// Cast to double
     operator double() const {
-        int max_i = 0;
-        for (int i = 0; i < SIZE; ++i) {
+        uint16_t max_i = 0;
+        for (uint16_t i = 0; i < SIZE; ++i) {
             if (this->mm[i] > this->mm[max_i]) max_i = i;
         }
         return static_cast<double>(this->mm[max_i]);
     }
 
     /// Returns size of VecX
-    const int getSize() const { return this->size; }
+    const uint16_t getSize() const { return this->size; }
 
     /// Returns a Vec3 with the first three elements of the VecX.
     Vec2<T> getVec2() const { return Vec2<T>(this->mm[0], this->mm[1]); }
@@ -82,25 +82,25 @@ public:
     /// Set "this" vector to zero
     const VecX<SIZE, T>& setZero()
     {
-        for (int i = 0; i < SIZE; i++) {this->mm[i] = 0;}
+        for (uint16_t i = 0; i < SIZE; i++) {this->mm[i] = 0;}
         return *this;
     }
 
     /// Assignment operator
-    template<int SRC_SIZE, typename Source>
+    template<uint16_t SRC_SIZE, typename Source>
     const VecX<SIZE, T>& operator=(const VecX<SRC_SIZE, Source> &v)
     {
         // note: don't static_cast because that suppresses warnings i<=100/2 && j>100/2
-        for (int i = 0; i < getSize() && i < v.getSize(); i++) {this->mm[i] = v[i];}
+        for (uint16_t i = 0; i < getSize() && i < v.getSize(); i++) {this->mm[i] = v[i];}
         return *this;
     }
 
     /// Test if "this" vector is equivalent to vector v with int
-    template<int SRC_SIZE>
+    template<uint16_t SRC_SIZE>
     bool eq(const VecX<SRC_SIZE, T> &v, T eps = static_cast<T>(1.0e-8)) const
     {
         if (SRC_SIZE != getSize()) { return false; }
-        for (int i = 0; i < SRC_SIZE; i++) {
+        for (uint16_t i = 0; i < SRC_SIZE; i++) {
             if (!isApproxEqual(this->mm[i], v.mm[i], eps)){
                 return false;
             }
@@ -112,7 +112,7 @@ public:
     VecX operator-() const
     {   
         VecX<SIZE, T> tmp(SIZE);     
-        for (int i = 0; i < SIZE; i++) {
+        for (uint16_t i = 0; i < SIZE; i++) {
             tmp[i] = -this->mm[i];
         }
         return tmp;
@@ -120,20 +120,20 @@ public:
 
     /// this = v1 + v2
     /// "this", v1 and v2 need not be distinct objects, e.g. v.add(v1,v);
-    template <typename T0, typename T1, int SIZE_0, int SIZE_1>
+    template <typename T0, typename T1, uint16_t SIZE_0, uint16_t SIZE_1>
     const VecX<SIZE, T>& add(const VecX<SIZE_0, T0> &v1, const VecX<SIZE_1, T1> &v2)
     {
         if (SIZE_0 == SIZE_1)
         {
-            for (int i = 0; i < SIZE_0; i++) { this->mm[i] = v1[i] + v2[i]; }
+            for (uint16_t i = 0; i < SIZE_0; i++) { this->mm[i] = v1[i] + v2[i]; }
             return *this;
         } else if (SIZE_0 > SIZE_1){
-            for (int i = 0; i < SIZE_1; i++) { this->mm[i] = v1[i] + v2[i]; }
-            for (int i = SIZE_1; i < SIZE_0; i++) { this->mm[i] = v1[i]; }
+            for (uint16_t i = 0; i < SIZE_1; i++) { this->mm[i] = v1[i] + v2[i]; }
+            for (uint16_t i = SIZE_1; i < SIZE_0; i++) { this->mm[i] = v1[i]; }
             return *this;
         } else if (SIZE_1 > SIZE_0){
-            for (int i = 0; i < SIZE_0; i++) { this->mm[i] = v1[i] + v2[i]; }
-            for (int i = SIZE_0; i < SIZE_1; i++) { this->mm[i] = v2[i]; }
+            for (uint16_t i = 0; i < SIZE_0; i++) { this->mm[i] = v1[i] + v2[i]; }
+            for (uint16_t i = SIZE_0; i < SIZE_1; i++) { this->mm[i] = v2[i]; }
             return *this;
         }
     }
@@ -141,20 +141,20 @@ public:
 
     /// this = v1 - v2
     /// "this", v1 and v2 need not be distinct objects, e.g. v.sub(v1,v);
-    template <typename T0, typename T1, int SIZE_0, int SIZE_1>
+    template <typename T0, typename T1, uint16_t SIZE_0, uint16_t SIZE_1>
     const VecX<SIZE, T>& sub(const VecX<SIZE_0, T0> &v1, const VecX<SIZE_1, T1> &v2)
     {
         if (SIZE_0 == SIZE_1)
         {
-            for (int i = 0; i < SIZE_0; i++) { this->mm[i] = v1[i] - v2[i]; }
+            for (uint16_t i = 0; i < SIZE_0; i++) { this->mm[i] = v1[i] - v2[i]; }
             return *this;
         } else if (SIZE_0 > SIZE_1){
-            for (int i = 0; i < SIZE_1; i++) { this->mm[i] = v1[i] - v2[i]; }
-            for (int i = SIZE_1; i < SIZE_0; i++) { this->mm[i] = v1[i]; }
+            for (uint16_t i = 0; i < SIZE_1; i++) { this->mm[i] = v1[i] - v2[i]; }
+            for (uint16_t i = SIZE_1; i < SIZE_0; i++) { this->mm[i] = v1[i]; }
             return *this;
         } else if (SIZE_1 > SIZE_0){
-            for (int i = 0; i < SIZE_0; i++) { this->mm[i] = v1[i] - v2[i]; }
-            for (int i = SIZE_0; i < SIZE_1; i++) { this->mm[i] = -v2[i]; }
+            for (uint16_t i = 0; i < SIZE_0; i++) { this->mm[i] = v1[i] - v2[i]; }
+            for (uint16_t i = SIZE_0; i < SIZE_1; i++) { this->mm[i] = -v2[i]; }
             return *this;
         }
     }
@@ -164,14 +164,14 @@ public:
     template <typename T0, typename T1>
     const VecX<SIZE, T>& scale(T0 scale, const VecX<SIZE, T1> &v)
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] = scale * v[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] = scale * v[i]; }
         return *this;
     }
 
     template <typename T0, typename T1>
     const VecX<SIZE, T> &div(T0 scalar, const VecX<SIZE, T1> &v)
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] = v[i] / scalar; }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] = v[i] / scalar; }
         return *this;
     }
 
@@ -179,7 +179,7 @@ public:
     T dot(const VecX<SIZE, T> &v) const
     {   
         T dot;
-        for (int i = 0; i < SIZE; i++) { dot += this->mm[i]*v.mm[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { dot += this->mm[i]*v.mm[i]; }
         return dot;
     }
 
@@ -187,7 +187,7 @@ public:
     T length() const
     {
         T norm;
-        for (int i = 0; i < SIZE; i++) { norm += this->mm[i]*this->mm[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { norm += this->mm[i]*this->mm[i]; }
         return std::sqrt(norm);
     }
 
@@ -196,7 +196,7 @@ public:
     T lengthSqr() const
     {
         T norm;
-        for (int i = 0; i < SIZE; i++) { norm += this->mm[i]*this->mm[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { norm += this->mm[i]*this->mm[i]; }
         return norm;
     }
 
@@ -204,7 +204,7 @@ public:
     /// applied to all the vector components.
     inline const VecX<SIZE, T>& exp()
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] = std::exp(this->mm[i]); }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] = std::exp(this->mm[i]); }
         return *this;
     }
 
@@ -212,7 +212,7 @@ public:
     /// applied to all the vector components.
     inline const VecX<SIZE, T>& log()
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] = std::log(this->mm[i]); }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] = std::log(this->mm[i]); }
         return *this;
     }
 
@@ -220,7 +220,7 @@ public:
     inline T sum() const
     {
         T sum;
-        for (int i = 0; i < SIZE; i++) { sum += this->mm[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { sum += this->mm[i]; }
         return sum;
     }
 
@@ -228,7 +228,7 @@ public:
     inline T product() const
     {
         T prod;
-        for (int i = 0; i < SIZE; i++) { prod *= this->mm[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { prod *= this->mm[i]; }
         return prod;
     }
 
@@ -273,7 +273,7 @@ public:
     template <typename S>
     const VecX<SIZE, T> &operator*=(S scalar)
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] *= scalar; }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] *= scalar; }
         return *this;
     }
 
@@ -281,7 +281,7 @@ public:
     template <typename S>
     const VecX<SIZE, T> &operator*=(const VecX<SIZE, S> &v1)
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] *= v1[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] *= v1[i]; }
         return *this;
     }
 
@@ -289,7 +289,7 @@ public:
     template <typename S>
     const VecX<SIZE, T> &operator/=(S scalar)
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] /= scalar; }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] /= scalar; }
         return *this;
     }
 
@@ -297,7 +297,7 @@ public:
     template <typename S>
     const VecX<SIZE, T> &operator/=(const VecX<SIZE, S> &v1)
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] /= v1[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] /= v1[i]; }
         return *this;
     }
 
@@ -305,7 +305,7 @@ public:
     template <typename S>
     const VecX<SIZE, T> &operator+=(S scalar)
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] += scalar; }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] += scalar; }
         return *this;
     }
 
@@ -313,7 +313,7 @@ public:
     template <typename S>
     const VecX<SIZE, T> &operator+=(const VecX<SIZE, S> &v1)
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] += v1[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] += v1[i]; }
         return *this;
     }
 
@@ -321,7 +321,7 @@ public:
     template <typename S>
     const VecX<SIZE, T> &operator-=(S scalar)
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] -= scalar; }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] -= scalar; }
         return *this;
     }
 
@@ -329,7 +329,7 @@ public:
     template <typename S>
     const VecX<SIZE, T> &operator-=(const VecX<SIZE, S> &v1)
     {
-        for (int i = 0; i < SIZE; i++) { this->mm[i] -= v1[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { this->mm[i] -= v1[i]; }
         return *this;
     }
 
@@ -344,11 +344,11 @@ public:
 };
 
 /// Equality operator, does exact floating point comparisons
-template <typename T0, typename T1, int SIZE_0, int SIZE_1>
+template <typename T0, typename T1, uint16_t SIZE_0, uint16_t SIZE_1>
 inline bool operator==(const VecX<SIZE_0, T0> &v0, const VecX<SIZE_1, T1> &v1)
 {
     if (SIZE_0 != SIZE_0) { return false; }
-        for (int i = 0; i < SIZE_0; i++) {
+        for (uint16_t i = 0; i < SIZE_0; i++) {
             if (!isExactlyEqual(v0[i], v1[i])){
                 return false;
             }
@@ -357,16 +357,16 @@ inline bool operator==(const VecX<SIZE_0, T0> &v0, const VecX<SIZE_1, T1> &v1)
 }
 
 /// Inequality operator, does exact floating point comparisons
-template <typename T0, typename T1, int SIZE_0, int SIZE_1>
+template <typename T0, typename T1, uint16_t SIZE_0, uint16_t SIZE_1>
 inline bool operator!=(const VecX<SIZE_0, T0> &v0, const VecX<SIZE_1, T1> &v1) { return !(v0==v1); }
 
 /// Multiply each element of the given vector by @a scalar and return the result.
-template <int SIZE, typename S, typename T>
+template <uint16_t SIZE, typename S, typename T>
 inline VecX<SIZE, typename promote<S, T>::type> operator*(S scalar, const VecX<SIZE, T> &v)
 { return v*scalar; }
 
 /// Multiply each element of the given vector by @a scalar and return the result.
-template <int SIZE, typename S, typename T>
+template <uint16_t SIZE, typename S, typename T>
 inline VecX<SIZE, typename promote<S, T>::type> operator*(const VecX<SIZE, T> &v, S scalar)
 {
     VecX<SIZE, typename promote<S, T>::type> result(v);
@@ -375,25 +375,25 @@ inline VecX<SIZE, typename promote<S, T>::type> operator*(const VecX<SIZE, T> &v
 }
 
 /// Multiply corresponding elements of @a v0 and @a v1 and return the result.
-template <int SIZE, typename T0, typename T1>
+template <uint16_t SIZE, typename T0, typename T1>
 inline VecX<SIZE, typename promote<T0, T1>::type> operator*(const VecX<SIZE, T0> &v0, const VecX<SIZE, T1> &v1)
 {
     VecX<SIZE, typename promote<T0, T1>::type> result(static_cast<typename promote<T0, T1>::type>(0));
-    for (int i = 0; i < SIZE; i++) { result[i] = v0[i]*v1[i]; }
+    for (uint16_t i = 0; i < SIZE; i++) { result[i] = v0[i]*v1[i]; }
     return result;
 }
 
 /// Divide @a scalar by each element of the given vector and return the result.
-template <int SIZE, typename S, typename T>
+template <uint16_t SIZE, typename S, typename T>
 inline VecX<SIZE, typename promote<S, T>::type> operator/(S scalar, const VecX<SIZE, T> &v)
 {
     VecX<SIZE, typename promote<S, T>::type> result(v);
-    for (int i = 0; i < SIZE; i++) { result[i] = scalar/result[i]; }
+    for (uint16_t i = 0; i < SIZE; i++) { result[i] = scalar/result[i]; }
     return result;
 }
 
 /// Divide each element of the given vector by @a scalar and return the result.
-template <int SIZE, typename S, typename T>
+template <uint16_t SIZE, typename S, typename T>
 inline VecX<SIZE, typename promote<S, T>::type> operator/(const VecX<SIZE, T> &v, S scalar)
 {
     VecX<SIZE, typename promote<S, T>::type> result(v);
@@ -402,16 +402,16 @@ inline VecX<SIZE, typename promote<S, T>::type> operator/(const VecX<SIZE, T> &v
 }
 
 /// Divide corresponding elements of @a v0 and @a v1 and return the result.
-template <int SIZE, typename T0, typename T1>
+template <uint16_t SIZE, typename T0, typename T1>
 inline VecX<SIZE, typename promote<T0, T1>::type> operator/(const VecX<SIZE, T0> &v0, const VecX<SIZE, T1> &v1)
 {
     VecX<SIZE, typename promote<T0, T1>::type> result(v0);
-    for (int i = 0; i < SIZE; i++) { result[i] /= v1[i]; }
+    for (uint16_t i = 0; i < SIZE; i++) { result[i] /= v1[i]; }
     return result;
 }
 
 /// Add corresponding elements of @a v0 and @a v1 and return the result.
-template <int SIZE, typename T0, typename T1>
+template <uint16_t SIZE, typename T0, typename T1>
 inline VecX<SIZE, typename promote<T0, T1>::type> operator+(const VecX<SIZE, T0> &v0, const VecX<SIZE, T1> &v1)
 {
     VecX<SIZE, typename promote<T0, T1>::type> result(v0);
@@ -420,7 +420,7 @@ inline VecX<SIZE, typename promote<T0, T1>::type> operator+(const VecX<SIZE, T0>
 }
 
 /// Add @a scalar to each element of the given vector and return the result.
-template <int SIZE, typename S, typename T>
+template <uint16_t SIZE, typename S, typename T>
 inline VecX<SIZE, typename promote<S, T>::type> operator+(const VecX<SIZE, T> &v, S scalar)
 {
     VecX<SIZE, typename promote<S, T>::type> result(v);
@@ -429,7 +429,7 @@ inline VecX<SIZE, typename promote<S, T>::type> operator+(const VecX<SIZE, T> &v
 }
 
 /// Subtract corresponding elements of @a v0 and @a v1 and return the result.
-template <int SIZE, typename T0, typename T1>
+template <uint16_t SIZE, typename T0, typename T1>
 inline VecX<SIZE, typename promote<T0, T1>::type> operator-(const VecX<SIZE, T0> &v0, const VecX<SIZE, T1> &v1)
 {
     VecX<SIZE, typename promote<T0, T1>::type> result(v0);
@@ -438,7 +438,7 @@ inline VecX<SIZE, typename promote<T0, T1>::type> operator-(const VecX<SIZE, T0>
 }
 
 /// Subtract @a scalar from each element of the given vector and return the result.
-template <int SIZE, typename S, typename T>
+template <uint16_t SIZE, typename S, typename T>
 inline VecX<SIZE, typename promote<S, T>::type> operator-(const VecX<SIZE, T> &v, S scalar)
 {
     VecX<SIZE, typename promote<S, T>::type> result(v);
@@ -446,19 +446,19 @@ inline VecX<SIZE, typename promote<S, T>::type> operator-(const VecX<SIZE, T> &v
     return result;
 }
 
-template <int SIZE, typename T>
+template <uint16_t SIZE, typename T>
 inline bool
 isApproxEqual(const VecX<SIZE, T>& a, const VecX<SIZE, T>& b)
 {
     return a.eq(b);
 }
 
-template <typename T, int SIZE_0, int SIZE_1>
+template <typename T, uint16_t SIZE_0, uint16_t SIZE_1>
 inline bool
 isApproxEqual(const VecX<SIZE_0, T>& a, const VecX<SIZE_1, T>& b, const T eps)
 {
     if (SIZE_0 != SIZE_1) { return false; }
-        for (int i = 0; i < SIZE_0; i++) {
+        for (uint16_t i = 0; i < SIZE_0; i++) {
             if (!isApproxEqual(a[i], b[i], eps)){
                 return false;
             }
@@ -466,12 +466,12 @@ isApproxEqual(const VecX<SIZE_0, T>& a, const VecX<SIZE_1, T>& b, const T eps)
         return true;
 }
 
-template<int SIZE, typename T>
+template<uint16_t SIZE, typename T>
 inline VecX<SIZE, T>
 Abs(const VecX<SIZE, T>& v)
 {
     VecX<SIZE, T> result(static_cast<T>(0));
-    for (int i = 0; i < SIZE; i++) { result[i] = Abs(result[i]); }
+    for (uint16_t i = 0; i < SIZE; i++) { result[i] = Abs(result[i]); }
     return result; 
 }
 
@@ -481,31 +481,31 @@ Abs(const VecX<SIZE, T>& v)
 /// fabricate a new object which might not match either of the inputs.
 
 /// Return component-wise minimum of the two vectors.
-template <int SIZE, typename T>
+template <uint16_t SIZE, typename T>
 inline VecX<SIZE, T> minComponent(const VecX<SIZE, T> &v1, const VecX<SIZE, T> &v2)
 {
     VecX<SIZE, T> result(static_cast<T>(0));
-    for (int i = 0; i < SIZE; i++) { result[i] = std::min(v1[i], v2[i]); }
+    for (uint16_t i = 0; i < SIZE; i++) { result[i] = std::min(v1[i], v2[i]); }
     return result; 
 }
 
 /// Return component-wise maximum of the two vectors.
-template <int SIZE, typename T>
+template <uint16_t SIZE, typename T>
 inline VecX<SIZE, T> maxComponent(const VecX<SIZE, T> &v1, const VecX<SIZE, T> &v2)
 {
     VecX<SIZE, T> result(static_cast<T>(0));
-    for (int i = 0; i < SIZE; i++) { result[i] = std::min(v1[i], v2[i]); }
+    for (uint16_t i = 0; i < SIZE; i++) { result[i] = std::min(v1[i], v2[i]); }
     return result; 
 }
 
 /// @brief Return a vector with the exponent applied to each of
 /// the components of the input vector.
-template <int SIZE, typename T>
+template <uint16_t SIZE, typename T>
 inline VecX<SIZE, T> Exp(VecX<SIZE, T> v) { return v.exp(); }
 
 /// @brief Return a vector with log applied to each of
 /// the components of the input vector.
-template <int SIZE, typename T>
+template <uint16_t SIZE, typename T>
 inline VecX<SIZE, T> Log(VecX<SIZE, T> v) { return v.log(); }
 
 } // namespace math

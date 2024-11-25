@@ -885,7 +885,7 @@ public:
 // ----------------------------> VecX <--------------------------------------
 
 /// @brief A simple vector class with X components, similar to openvdb::math::VecX
-template<int SIZE, typename T>
+template<uint16_t SIZE, typename T>
 class VecX
 {
     T mVec[SIZE];
@@ -895,56 +895,56 @@ public:
     VecX() = default;
     __hostdev__ explicit VecX(T x)
     {
-        for (int i = 0; i < SIZE; i++) { mVec[i] = x; }
+        for (uint16_t i = 0; i < SIZE; i++) { mVec[i] = x; }
     }
     __hostdev__ VecX(const VecX<SIZE, T>& v)
     {
-        for (int i = 0; i < SIZE; i++) { mVec[i] = static_cast<T>(v[i]); }
+        for (uint16_t i = 0; i < SIZE; i++) { mVec[i] = static_cast<T>(v[i]); }
     }
-    template <typename T1, int SIZE_1>
+    template <typename T1, uint16_t SIZE_1>
     __hostdev__ inline bool operator==(const VecX<SIZE_1, T1> &v)
     {
         if (SIZE != SIZE_1) { return false; }
-            for (int i = 0; i < SIZE; i++) {
+            for (uint16_t i = 0; i < SIZE; i++) {
                 if (!isExactlyEqual(mVec[i], v[i])){
                     return false;
                 }
             }
             return true;
     }
-    template <typename T1, int SIZE_1>
+    template <typename T1, uint16_t SIZE_1>
     __hostdev__ bool operator!=(const VecX<SIZE_1, T1>& rhs) const { return !(mVec==rhs); }
-    template <typename T1, int SIZE_1>
+    template <typename T1, uint16_t SIZE_1>
     __hostdev__ bool operator=(const VecX<SIZE_1, T1>& rhs) const
     {
         // note: don't static_cast because that suppresses warnings i<=100/2 && j>100/2
-        for (int i = 0; i < SIZE && i < SIZE_1; i++) {mVec[i] = rhs[i];}
+        for (uint16_t i = 0; i < SIZE && i < SIZE_1; i++) {mVec[i] = rhs[i];}
         return *this;
     }
-    __hostdev__ const T& operator[](int i) const { return mVec[i]; }
-    __hostdev__ T&       operator[](int i) { return mVec[i]; }
+    __hostdev__ const T& operator[](uint16_t i) const { return mVec[i]; }
+    __hostdev__ T&       operator[](uint16_t i) { return mVec[i]; }
     __hostdev__ T dot(const VecX<SIZE, T>& v)
     {
         T dot = 0;
-        for (int i = 0; i < SIZE; i++) { dot += this->mm[i]*v.mm[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { dot += this->mm[i]*v.mm[i]; }
         return dot;
     }
     __hostdev__ T lengthSqr() const
     {
         T norm = 0;
-        for (int i = 0; i < SIZE; i++) { norm += this->mm[i]*this->mm[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { norm += this->mm[i]*this->mm[i]; }
         return norm;
     }
     __hostdev__ T     length() const
     {
         T norm = 0;
-        for (int i = 0; i < SIZE; i++) { norm += this->mm[i]*this->mm[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { norm += this->mm[i]*this->mm[i]; }
         return std::sqrt(norm);
     }
     __hostdev__ VecX  operator-() const
     {
         VecX<SIZE, T> tmp(SIZE);
-        for (int i = 0; i < SIZE; i++) {
+        for (uint16_t i = 0; i < SIZE; i++) {
             tmp[i] = -this->mm[i];
         }
         return tmp;
@@ -953,28 +953,28 @@ public:
     __hostdev__ VecX  operator*(const VecX<SIZE, T1>& v) const
     {
         VecX<SIZE, T> result(static_cast<T>(0));
-        for (int i = 0; i < SIZE; i++) { result[i] = mVec[i]*v[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { result[i] = mVec[i]*v[i]; }
         return result;
     }
     template <typename T1>
     __hostdev__ VecX  operator/(const VecX<SIZE, T1>& v) const
     {
         VecX<SIZE, T> result(mVec);
-        for (int i = 0; i < SIZE; i++) { result[i] /= v[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { result[i] /= v[i]; }
         return result;
     }
     template <typename T1>
     __hostdev__ VecX  operator+(const VecX<SIZE, T1>& v) const
     {
         VecX<SIZE, T> result(mVec);
-        for (int i = 0; i < SIZE; i++) { result[i] += v[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { result[i] += v[i]; }
         return result;
     }
     template <typename T1>
     __hostdev__ VecX  operator-(const VecX<SIZE, T1>& v) const
     {
         VecX<SIZE, T> result(mVec);
-        for (int i = 0; i < SIZE; i++) { result[i] -= v[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { result[i] -= v[i]; }
         return result;
     }
     template <typename S>
@@ -994,25 +994,25 @@ public:
     template <typename T1>
     __hostdev__ VecX& operator+=(const VecX<SIZE, T1>& v)
     {
-        for (int i = 0; i < SIZE; i++) { mVec[i] += v[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { mVec[i] += v[i]; }
         return *this;
     }
     template <typename T1>
     __hostdev__ VecX& operator-=(const VecX<SIZE, T1>& v)
     {
-        for (int i = 0; i < SIZE; i++) { mVec[i] -= v[i]; }
+        for (uint16_t i = 0; i < SIZE; i++) { mVec[i] -= v[i]; }
         return *this;
     }
     template <typename S>
     __hostdev__ VecX& operator*=(const S& s)
     {
-        for (int i = 0; i < SIZE; i++) { mVec[i] *= s; }
+        for (uint16_t i = 0; i < SIZE; i++) { mVec[i] *= s; }
         return *this;
     }
     template <typename S>
     __hostdev__ VecX& operator/=(const S& s)
     {
-        for (int i = 0; i < SIZE; i++) { mVec[i] /= s; }
+        for (uint16_t i = 0; i < SIZE; i++) { mVec[i] /= s; }
         return *this;
     }
     __hostdev__ VecX& normalize() { return (*this) /= this->length(); }
@@ -1558,8 +1558,8 @@ using Vec4d  = Vec4<double>;
 using Vec4f  = Vec4<float>;
 using Vec4i  = Vec4<int>;
 
-template <int S>
-using VecXi = math::VecX<S, uint16_t>;
+template <uint16_t S>
+using VecXi = math::VecX<S, uint32_t>;
 
 }// namespace math ===============================================================
 
