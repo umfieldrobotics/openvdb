@@ -53,6 +53,7 @@ namespace io { class DelayedLoadMetadata; }
 using BoolTree     = tree::Tree4<bool,        5, 4, 3>::Type;
 using DoubleTree   = tree::Tree4<double,      5, 4, 3>::Type;
 using FloatTree    = tree::Tree4<float,       5, 4, 3>::Type;
+using Int16Tree    = tree::Tree4<int16_t,    5, 4, 3>::Type;
 using Int32Tree    = tree::Tree4<int32_t,     5, 4, 3>::Type;
 using Int64Tree    = tree::Tree4<int64_t,     5, 4, 3>::Type;
 using MaskTree     = tree::Tree4<ValueMask,   5, 4, 3>::Type;
@@ -75,6 +76,7 @@ using VectorTree   = Vec3fTree;
 using BoolGrid     = Grid<BoolTree>;
 using DoubleGrid   = Grid<DoubleTree>;
 using FloatGrid    = Grid<FloatTree>;
+using Int16Grid    = Grid<Int16Tree>;
 using Int32Grid    = Grid<Int32Tree>;
 using Int64Grid    = Grid<Int64Tree>;
 using MaskGrid     = Grid<MaskTree>;
@@ -94,7 +96,7 @@ using VecXIGrid    = Grid<VecXITree<S>>;
 /// The floating point Grid types which OpenVDB will register by default.
 using RealGridTypes   = TypeList<FloatGrid, DoubleGrid>;
 /// The integer Grid types which OpenVDB will register by default.
-using IntegerGridTypes = TypeList<Int32Grid, Int64Grid>;
+using IntegerGridTypes = TypeList<Int16Grid, Int32Grid, Int64Grid>;
 /// The scalar Grid types which OpenVDB will register by default. This is a
 /// combination of native floating point and integer grid types. Note that
 /// this list does not include Bool or Mask Grids.
